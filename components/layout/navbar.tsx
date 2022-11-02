@@ -3,8 +3,9 @@ import { useState } from 'react';
 import { LoadingDots } from '@/components/icons';
 import Image from 'next/image';
 import { MenuIcon } from '@heroicons/react/outline';
+import { LogoutIcon } from "@heroicons/react/solid";
 import Link from 'next/link';
-import { LogoutIcon } from "@heroicons/react/outline";
+
 export default function Navbar({
   setSidebarOpen
 }: {
@@ -51,9 +52,9 @@ export default function Navbar({
                 signOut({ callbackUrl: `/` });
               }}
               className={`${loading
-                ? 'bg-gray-200 border-gray-300'
-                : 'bg-black hover:bg-white border-black'
-                } w-7 h-8 ml-1 py-1 text-white hover:text-black border rounded-md text-sm transition-all`}
+                ? ''
+                : ''
+                } w-7 h-8 ml-1 py-1 text-black hover:text-white rounded-md text-sm transition-all`}
             >
               {loading ? <LoadingDots color="gray" /> : <LogoutIcon className='w-5 h-5 ml-1' />}
             </button>
