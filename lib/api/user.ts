@@ -171,7 +171,7 @@ export async function searchUser(query: string): Promise<UserProps[]> {
       {
         // filter out users that are not verified
         $match: {
-          verified: true
+          //verified: true
         }
       },
       // limit to 10 results

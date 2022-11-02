@@ -28,36 +28,52 @@ export default function Navbar({
       </button>
       {status !== 'loading' &&
         (session?.user ? (
-          <Link href={`/${session.username}`}>
-            <a className="w-8 h-8 rounded-full overflow-hidden">
-              <Image
-                src={
-                  session.user.image ||
-                  `https://avatar.tobi.sh/${session.user.name}`
-                }
-                alt={session.user.name || 'User'}
-                width={300}
-                height={300}
-                placeholder="blur"
-                blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYV2PYsGHDfwAHNAMQumvbogAAAABJRU5ErkJggg=="
-              />
-            </a>
-          </Link>
-        ) : (
-          <button
-            disabled={loading}
-            onClick={() => {
-              setLoading(true);
-              signIn('github', { callbackUrl: `/profile` });
-            }}
-            className={`${
-              loading
+          <div>
+            <Link href={`/${session.username}`}>
+              <a className="w-8 h-8 rounded-full overflow-hidden">
+                <Image
+                  src={
+                    session.user.image ||
+                    `https://avatar.tobi.sh/${session.user.name}`
+                  }
+                  alt={session.user.name || 'User'}
+                  width={300}
+                  height={300}
+                  placeholder="blur"
+                  blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYV2PYsGHDfwAHNAMQumvbogAAAABJRU5ErkJggg=="
+                />
+              </a>
+            </Link>
+            <button
+              disabled={loading}
+              onClick={() => {
+                setLoading(true);
+                signOut({ callbackUrl: `/` });
+              }}
+              className={`${loading
                 ? 'bg-gray-200 border-gray-300'
                 : 'bg-black hover:bg-white border-black'
-            } w-36 h-8 py-1 text-white hover:text-black border rounded-md text-sm transition-all`}
-          >
-            {loading ? <LoadingDots color="gray" /> : 'Log in with GitHub'}
-          </button>
+                } w-24 h-8 ml-1 py-1 text-white hover:text-black border rounded-md text-sm transition-all`}
+            >
+              {loading ? <LoadingDots color="gray" /> : 'Log out'}
+            </button>
+          </div>
+        ) : (
+          <div>
+            <button
+              disabled={loading}
+              onClick={() => {
+                setLoading(true);
+                signIn('github', { callbackUrl: `/profile` });
+              }}
+              className={`${loading
+                ? 'bg-gray-200 border-gray-300'
+                : 'bg-black hover:bg-white border-black'
+                } w-36 h-8 py-1 text-white hover:text-black border rounded-md text-sm transition-all`}
+            >
+              {loading ? <LoadingDots color="gray" /> : 'Log in with GitHub'}
+            </button>
+          </div>
         ))}
     </nav>
   );
