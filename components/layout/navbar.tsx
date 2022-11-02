@@ -4,7 +4,7 @@ import { LoadingDots } from '@/components/icons';
 import Image from 'next/image';
 import { MenuIcon } from '@heroicons/react/outline';
 import Link from 'next/link';
-
+import { LogoutIcon } from "@heroicons/react/outline";
 export default function Navbar({
   setSidebarOpen
 }: {
@@ -28,7 +28,7 @@ export default function Navbar({
       </button>
       {status !== 'loading' &&
         (session?.user ? (
-          <div>
+          <>
             <Link href={`/${session.username}`}>
               <a className="w-8 h-8 rounded-full overflow-hidden">
                 <Image
@@ -53,27 +53,25 @@ export default function Navbar({
               className={`${loading
                 ? 'bg-gray-200 border-gray-300'
                 : 'bg-black hover:bg-white border-black'
-                } w-24 h-8 ml-1 py-1 text-white hover:text-black border rounded-md text-sm transition-all`}
+                } w-7 h-8 ml-1 py-1 text-white hover:text-black border rounded-md text-sm transition-all`}
             >
-              {loading ? <LoadingDots color="gray" /> : 'Log out'}
+              {loading ? <LoadingDots color="gray" /> : <LogoutIcon className='w-5 h-5 ml-1' />}
             </button>
-          </div>
+          </>
         ) : (
-          <div>
-            <button
-              disabled={loading}
-              onClick={() => {
-                setLoading(true);
-                signIn('github', { callbackUrl: `/profile` });
-              }}
-              className={`${loading
-                ? 'bg-gray-200 border-gray-300'
-                : 'bg-black hover:bg-white border-black'
-                } w-36 h-8 py-1 text-white hover:text-black border rounded-md text-sm transition-all`}
-            >
-              {loading ? <LoadingDots color="gray" /> : 'Log in with GitHub'}
-            </button>
-          </div>
+          <button
+            disabled={loading}
+            onClick={() => {
+              setLoading(true);
+              signIn('github', { callbackUrl: `/profile` });
+            }}
+            className={`${loading
+              ? 'bg-gray-200 border-gray-300'
+              : 'bg-black hover:bg-white border-black'
+              } w-36 h-8 py-1 text-white hover:text-black border rounded-md text-sm transition-all`}
+          >
+            {loading ? <LoadingDots color="gray" /> : 'Log in with GitHub'}
+          </button>
         ))}
     </nav>
   );
