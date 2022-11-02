@@ -36,14 +36,11 @@ export async function getMdxSource(postContents: string) {
   return mdxSource;
 }
 
-export const placeholderBio = `
-Tincidunt quam neque in cursus viverra orci, dapibus nec tristique. Nullam ut sit dolor consectetur urna, dui cras nec sed. Cursus risus congue arcu aenean posuere aliquam.
-
-Et vivamus lorem pulvinar nascetur non. Pulvinar a sed platea rhoncus ac mauris amet. Urna, sem pretium sit pretium urna, senectus vitae. Scelerisque fermentum, cursus felis dui suspendisse velit pharetra. Augue et duis cursus maecenas eget quam lectus. Accumsan vitae nascetur pharetra rhoncus praesent dictum risus suspendisse.`;
+export const placeholderBio = `<i><b>This person has no bio.</b></i>`;
 
 export async function getUser(username: string): Promise<UserProps | null> {
   const client = await clientPromise;
-  const collection = client.db('test').collection('users');
+  const collection = client.db('asosdevs').collection('users');
   const results = await collection.findOne(
     { username },
     { projection: { _id: 0, emailVerified: 0 } }
@@ -60,7 +57,7 @@ export async function getUser(username: string): Promise<UserProps | null> {
 
 export async function getFirstUser(): Promise<UserProps | null> {
   const client = await clientPromise;
-  const collection = client.db('test').collection('users');
+  const collection = client.db('asosdevs').collection('users');
   const results = await collection.findOne(
     {},
     {
@@ -75,7 +72,7 @@ export async function getFirstUser(): Promise<UserProps | null> {
 
 export async function getAllUsers(): Promise<ResultProps[]> {
   const client = await clientPromise;
-  const collection = client.db('test').collection('users');
+  const collection = client.db('asosdevs').collection('users');
   return await collection
     .aggregate([
       {
@@ -117,7 +114,7 @@ export async function getAllUsers(): Promise<ResultProps[]> {
 
 export async function searchUser(query: string): Promise<UserProps[]> {
   const client = await clientPromise;
-  const collection = client.db('test').collection('users');
+  const collection = client.db('asosdevs').collection('users');
   return await collection
     .aggregate([
       {
@@ -196,12 +193,12 @@ export async function searchUser(query: string): Promise<UserProps[]> {
 
 export async function getUserCount(): Promise<number> {
   const client = await clientPromise;
-  const collection = client.db('test').collection('users');
+  const collection = client.db('asosdevs').collection('users');
   return await collection.countDocuments();
 }
 
 export async function updateUser(username: string, bio: string) {
   const client = await clientPromise;
-  const collection = client.db('test').collection('users');
+  const collection = client.db('asosdevs').collection('users');
   return await collection.updateOne({ username }, { $set: { bio } });
 }

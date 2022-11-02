@@ -12,7 +12,7 @@ const setup = async () => {
     await client.connect();
 
     const hasData = await client
-      .db('test')
+      .db('asosdevs')
       .collection('users')
       .countDocuments();
 
@@ -22,7 +22,7 @@ const setup = async () => {
       return;
     }
 
-    const records = [...Array(10)].map(() => {
+    const records = [...Array(1)].map(() => {
       const [fName, lName] = faker.name.findName().split(' ');
       const username = faker.internet.userName(fName, lName);
       const email = faker.internet.email(fName, lName);
@@ -39,7 +39,7 @@ const setup = async () => {
     });
 
     const insert = await client
-      .db('test')
+      .db('asosdevs')
       .collection('users')
       .insertMany(records);
 

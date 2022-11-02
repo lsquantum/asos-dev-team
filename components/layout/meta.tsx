@@ -1,11 +1,11 @@
 import Head from 'next/head';
 
 export const defaultMetaProps = {
-  title: 'MongoDB Starter Kit',
+  title: 'ASOS Team',
   description:
-    'MongoDB Starter Kit built with Next.js, Vercel, and MongoDB Atlas.',
-  ogImage: `https://assets.vercel.com/image/upload/v1654626375/twitter-cards/mongo-integration-starter.png`,
-  ogUrl: 'https://mongodb.vercel.app'
+    'ASOS Team page built with Next.js, Vercel, and MongoDB Atlas.',
+  ogImage: `https://asos.saglik.gov.tr/Content/site/images/Login/logo_colored.png`,
+  ogUrl: 'https://asosdevteam.vercel.app/'
 };
 
 export interface MetaProps {

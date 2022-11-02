@@ -37,14 +37,16 @@ export default function Layout({
   }
 
   // You should remove this once your MongoDB Cluster is fully provisioned
-  if (clusterStillProvisioning) {
-    return <ClusterProvisioning />;
-  }
+  //if (clusterStillProvisioning) {
+  //  return <ClusterProvisioning />;
+  //}
 
   return (
     <div className="w-full mx-auto h-screen flex overflow-hidden bg-black">
       <Meta props={meta} />
-      <Toast username={username} />
+      {
+        // <Toast username={username} />
+      }
       <Sidebar
         sidebarOpen={sidebarOpen}
         setSidebarOpen={setSidebarOpen}
