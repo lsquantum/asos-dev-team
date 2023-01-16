@@ -1,31 +1,29 @@
-import { UserProps } from '@/lib/api/user';
-import { getGradient } from '@/lib/gradients';
 import {
-  CheckInCircleIcon,
-  CheckIcon,
-  EditIcon,
-  GitHubIcon,
-  LoadingDots,
-  UploadIcon,
+  CheckIcon, CheckInCircleIcon, EditIcon, EmailIcon, GitHubIcon, GlobeEuropeIcon, GlobeIcon, HomeIcon, LoadingDots, PhoneIcon, UploadIcon,
   XIcon
 } from '@/components/icons';
+import { UserProps } from '@/lib/api/user';
+import { getGradient } from '@/lib/gradients';
+
 import { useSession } from 'next-auth/react';
-import BlurImage from '../blur-image';
-import { useCallback, useEffect, useState } from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
-import TextareaAutosize from 'react-textarea-autosize';
+import { useCallback, useEffect, useState } from 'react';
+
 import { MDXRemote } from 'next-mdx-remote';
+import Link from 'next/link';
+import TextareaAutosize from 'react-textarea-autosize';
+import BlurImage from '../blur-image';
 
 export const profileWidth = 'max-w-5xl mx-auto px-4 sm:px-6 lg:px-8';
 
-export default function Profile({
-  settings,
-  user
-}: {
-  settings?: boolean;
-  user: UserProps;
-}) {
+const tabs = [
+  { name: 'Profile' },
+  { name: 'Work History' },
+  { name: 'Contact' },
+  { name: 'Tasks' }
+];
+
+export default function Profile({ settings, user }: { settings?: boolean; user: UserProps; }) {
   const router = useRouter();
   const { data: session } = useSession();
   const [saving, setSaving] = useState(false);
@@ -41,9 +39,9 @@ export default function Profile({
   }
 
   const [error, setError] = useState('');
-  const settingsPage =
-    settings ||
-    (router.query.settings === 'true' && router.asPath === '/settings');
+  const settingsPage = settings || (router.query.settings === 'true' && router.asPath === '/settings');
+
+  const [selectedTab, setSelectedTab] = useState('Profile');
 
   const handleDismiss = useCallback(() => {
     if (settingsPage) router.replace(`/${user.username}`);
@@ -122,13 +120,20 @@ export default function Profile({
             />
           </div>
           <div className="mt-6 sm:flex-1 sm:min-w-0 sm:flex sm:items-center sm:justify-end sm:space-x-6 sm:pb-1">
-            <div className="flex min-w-0 flex-1 items-center space-x-2">
-              <h1 className="text-2xl font-semibold text-white truncate">
-                {user.name}
-              </h1>
-              {user.verified && (
-                <CheckInCircleIcon className="w-6 h-6 text-[#0070F3]" />
-              )}
+            <div className="block min-w-0 flex-1 items-center space-x-0">
+              <div className="flex mt-3">
+                <h1 className="text-2xl font-semibold text-white truncate">
+                  {user.name}
+                </h1>
+                {user.verified && (
+                  <CheckInCircleIcon className="ml-1 mt-0 w-6 h-6 text-[#0070F3]" />
+                )}
+              </div>
+              <div>
+                <h1 className="text-sm font-semibold text-gray-400 truncate">
+                  {user.contact?.country}{(user.contact?.country && user.contact?.city) && ', '}{user.contact?.city}
+                </h1>
+              </div>
             </div>
             {user.verified ? (
               <div className="mt-6 flex flex-col justify-stretch space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">
@@ -157,13 +162,12 @@ export default function Profile({
             <nav className="-mb-px flex space-x-8" aria-label="Tabs">
               {tabs.map((tab) => (
                 <button
+                  onClick={() => setSelectedTab(tab.name)}
                   key={tab.name}
-                  disabled={tab.name !== 'Profile'}
-                  className={`${
-                    tab.name === 'Profile'
-                      ? 'border-white text-white'
-                      : 'border-transparent text-gray-400 cursor-not-allowed'
-                  }
+                  className={`${tab.name === selectedTab
+                    ? 'border-white text-white'
+                    : 'border-transparent text-gray-400'
+                    }
                     whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm font-mono`}
                 >
                   {tab.name}
@@ -175,43 +179,151 @@ export default function Profile({
       </div>
 
       {/* Bio */}
-      <div className={`${profileWidth} mt-16`}>
-        <h2 className="font-semibold font-mono text-2xl text-white">Bio</h2>
-        {settingsPage ? (
-          <>
-            <TextareaAutosize
-              name="description"
-              onInput={(e) => {
-                setData({
-                  ...data,
-                  bio: (e.target as HTMLTextAreaElement).value
-                });
-              }}
-              className="mt-1 w-full max-w-2xl px-0 text-sm tracking-wider leading-6 text-white bg-black font-mono border-0 border-b border-gray-800 focus:border-white resize-none focus:outline-none focus:ring-0"
-              placeholder="Enter a short bio about yourself... (Markdown supported)"
-              value={data.bio}
-            />
-            <div className="flex justify-end w-full max-w-2xl">
-              <p className="text-gray-400 font-mono text-sm">
-                {data.bio.length}/256
-              </p>
+      {selectedTab === 'Profile' &&
+        <div className={`${profileWidth} mt-16`}>
+          <h2 className="font-semibold font-mono text-2xl text-white">Bio</h2>
+          {settingsPage ? (
+            <>
+              <TextareaAutosize
+                name="description"
+                onInput={(e) => {
+                  setData({
+                    ...data,
+                    bio: (e.target as HTMLTextAreaElement).value
+                  });
+                }}
+                className="mt-1 w-full max-w-2xl px-0 text-sm tracking-wider leading-6 text-white bg-black font-mono border-0 border-b border-gray-800 focus:border-white resize-none focus:outline-none focus:ring-0"
+                placeholder="Enter a short bio about yourself... (Markdown supported)"
+                value={data.bio}
+              />
+              <div className="flex justify-end w-full max-w-2xl">
+                <p className="text-gray-400 font-mono text-sm">
+                  {data.bio.length}/256
+                </p>
+              </div>
+            </>
+          ) : (
+            <article className="mt-3 max-w-2xl text-sm tracking-wider leading-6 text-white font-mono prose prose-headings:text-white prose-a:text-white">
+              <MDXRemote {...data.bioMdx} />
+            </article>
+          )}
+        </div>
+      }
+
+      {/* Work History */}
+      {selectedTab === 'Work History' &&
+        <div className={`${profileWidth} mt-16`}>
+          <h2 className="font-semibold font-mono text-2xl text-white">Work History</h2>
+          {settings ? (
+            <div className='text-white font-mono text-sm'>
+              Edit
             </div>
-          </>
-        ) : (
-          <article className="mt-3 max-w-2xl text-sm tracking-wider leading-6 text-white font-mono prose prose-headings:text-white prose-a:text-white">
-            <MDXRemote {...data.bioMdx} />
-          </article>
-        )}
-      </div>
+          ) : (
+            <div className='mt-3 max-w-2xl text-sm tracking-wider leading-6 text-white font-mono prose prose-headings:text-white prose-a:text-white'>
+              No info...
+            </div>
+          )}
+        </div>
+      }
+
+      {/* Contact */}
+      {selectedTab === 'Contact' &&
+        <div className={`${profileWidth} mt-16`}>
+          <h2 className="font-semibold font-mono text-2xl text-white">Contact</h2>
+          {settings ? (
+            <div className='text-white font-mono text-sm'>
+              Edit
+            </div>
+          ) : (
+            <div className='mt-3 max-w-2xl text-sm tracking-wider leading-6 text-white font-mono prose prose-headings:text-white prose-a:text-white'>
+              {
+                user.email &&
+                (
+                  <div className='flex mt-1'>
+                    <div className='mr-2'>
+                      <EmailIcon className='h-6 w-6 text-white' />
+                    </div>
+                    <div className='font-bold'>Email:</div>
+                    <div className='ml-1'>{user.email}</div>
+                  </div>
+                )
+              }
+              {
+                user.contact?.phone &&
+                (
+                  <div className='flex mt-3'>
+                    <div className='mr-2'>
+                      <PhoneIcon className='h-6 w-6 text-white' />
+                    </div>
+                    <div className='font-bold'>Phone:</div>
+                    <div className='ml-1'>{user.contact?.phone}</div>
+                  </div>
+                )
+              }
+              {
+                user.contact?.address &&
+                (
+                  <div className='flex mt-3'>
+                    <div className='mr-2'>
+                      <HomeIcon className='h-6 w-6 text-white' />
+                    </div>
+                    <div className='font-bold'>Address:</div>
+                    <div className='ml-1'>{user.contact?.address}</div>
+                  </div>
+                )
+              }
+              {
+                user.contact?.country &&
+                (
+                  <div className='flex mt-3'>
+                    <div className='mr-2'>
+                      <GlobeIcon className='h-6 w-6 text-white' />
+                    </div>
+                    <div className='font-bold'>Country:</div>
+                    <div className='ml-1'>{user.contact?.country}</div>
+                  </div>
+                )
+              }
+              {
+                user.contact?.city &&
+                (
+                  <div className='flex mt-3'>
+                    <div className='mr-2'>
+                      <GlobeEuropeIcon className='h-6 w-6 text-white' />
+                    </div>
+                    <div className='font-bold'>City:</div>
+                    <div className='ml-1'>{user.contact?.city}</div>
+                  </div>
+                )
+              }
+            </div>
+          )}
+        </div>
+      }
+
+      {/* Tasks */}
+      {selectedTab === 'Tasks' &&
+        <div className={`${profileWidth} mt-16`}>
+          <h2 className="font-semibold font-mono text-2xl text-white">Tasks</h2>
+          {settings ? (
+            <div className='text-white font-mono text-sm'>
+              Edit
+            </div>
+          ) : (
+            <div className='mt-3 max-w-2xl text-sm tracking-wider leading-6 text-white font-mono prose prose-headings:text-white prose-a:text-white'>
+              No info...
+            </div>
+          )}
+        </div>
+      }
 
       {/* Edit buttons */}
       {settingsPage ? (
         <div className="fixed bottom-10 right-10 flex items-center space-x-3">
           <p className="text-sm text-gray-500">{error}</p>
           <button
-            className={`${
-              saving ? 'cursor-not-allowed' : ''
-            } rounded-full border border-[#0070F3] hover:border-2 w-12 h-12 flex justify-center items-center transition-all`}
+            className={`${saving ? 'cursor-not-allowed' : ''
+              } rounded-full border border-[#0070F3] hover:border-2 w-12 h-12 flex justify-center items-center transition-all`}
             disabled={saving}
             onClick={handleSave}
           >
@@ -243,9 +355,3 @@ export default function Profile({
     </div>
   );
 }
-
-const tabs = [
-  { name: 'Profile' },
-  { name: 'Work History' },
-  { name: 'Contact' }
-];

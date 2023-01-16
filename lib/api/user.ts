@@ -13,6 +13,15 @@ export interface UserProps {
   bioMdx: MDXRemoteSerializeResult<Record<string, unknown>>;
   followers: number;
   verified: boolean;
+  emailVerified: boolean;
+  contact : ContactProps;
+}
+
+export interface ContactProps {
+  phone: string;
+  address: string;
+  country: string;
+  city: string;
 }
 
 export interface ResultProps {

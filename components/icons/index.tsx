@@ -10,3 +10,8 @@ export { default as UploadIcon } from './upload';
 export { default as DirectoryIcon } from './directory';
 export { default as GitHubIcon } from './github';
 export { default as AlertCircleIcon } from './alert-circle';
+export { default as EmailIcon } from './email';
+export { default as PhoneIcon } from './phone';
+export { default as HomeIcon } from './home';
+export { default as GlobeIcon } from './globe';
+export { default as GlobeEuropeIcon } from './globa-europe';
